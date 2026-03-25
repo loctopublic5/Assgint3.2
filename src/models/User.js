@@ -41,11 +41,10 @@ const userSchema = new mongoose.Schema(
  * Middleware pre-save: Hash password trước khi lưu vào DB.
  * Chỉ hash khi password bị thay đổi (tránh double-hash).
  */
-userSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) return next();
+userSchema.pre('save', async function () {
+  if (!this.isModified('password')) return;
   const salt = await bcrypt.genSalt(12); // Salt rounds = 12 (đủ mạnh, không quá chậm)
   this.password = await bcrypt.hash(this.password, salt);
-  next();
 });
 
 /**

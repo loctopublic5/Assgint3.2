@@ -130,17 +130,21 @@ const login = async (req, res, next) => {
  * Trả về thông tin profile của user đang đăng nhập.
  * Cần JWT (sử dụng middleware 'protect').
  */
-const getMe = async (req, res) => {
-  // req.user đã được gắn bởi middleware 'protect'
-  res.status(200).json({
-    success: true,
-    user: {
-      id: req.user._id,
-      username: req.user.username,
-      email: req.user.email,
-      createdAt: req.user.createdAt,
-    },
-  });
+const getMe = async (req, res, next) => {
+  try {
+    // req.user đã được gắn bởi middleware 'protect'
+    res.status(200).json({
+      success: true,
+      user: {
+        id: req.user._id,
+        username: req.user.username,
+        email: req.user.email,
+        createdAt: req.user.createdAt,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 
 module.exports = { register, login, getMe };
